@@ -1,0 +1,48 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{83E3E7B4-D4CE-409D-A3EC-A49EB03F1C04}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="..\ProjectPDI.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\..\Versiones del profe\7-Histograma\7-Histograma\Project1.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="ProjectPDI">
+			<MSBuild Projects="..\ProjectPDI.dproj"/>
+		</Target>
+		<Target Name="ProjectPDI:Clean">
+			<MSBuild Targets="Clean" Projects="..\ProjectPDI.dproj"/>
+		</Target>
+		<Target Name="ProjectPDI:Make">
+			<MSBuild Targets="Make" Projects="..\ProjectPDI.dproj"/>
+		</Target>
+		<Target Name="Project1">
+			<MSBuild Projects="..\..\Versiones del profe\7-Histograma\7-Histograma\Project1.dproj"/>
+		</Target>
+		<Target Name="Project1:Clean">
+			<MSBuild Targets="Clean" Projects="..\..\Versiones del profe\7-Histograma\7-Histograma\Project1.dproj"/>
+		</Target>
+		<Target Name="Project1:Make">
+			<MSBuild Targets="Make" Projects="..\..\Versiones del profe\7-Histograma\7-Histograma\Project1.dproj"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="ProjectPDI;Project1"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="ProjectPDI:Clean;Project1:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="ProjectPDI:Make;Project1:Make"/>
+		</Target>
+		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+	</Project>
