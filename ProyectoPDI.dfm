@@ -18,62 +18,74 @@ object Form2: TForm2
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object ScrollBox1: TScrollBox
-    Left = 8
+  object GroupBox4: TGroupBox
+    Left = 680
     Top = 8
-    Width = 666
-    Height = 676
-    Constraints.MaxHeight = 700
-    Constraints.MaxWidth = 700
+    Width = 465
+    Height = 441
+    Caption = 'Filtros regionales'
     Enabled = False
-    TabOrder = 0
-    object Image1: TImage
-      Left = 3
-      Top = 3
-      Width = 374
-      Height = 403
-      AutoSize = True
-      OnMouseMove = Image1MouseMove
+    TabOrder = 4
+    Visible = False
+    object GroupBox5: TGroupBox
+      Left = 12
+      Top = 24
+      Width = 253
+      Height = 49
+      Caption = 'Derivada'
+      TabOrder = 0
+      object X: TCheckBox
+        Left = 13
+        Top = 17
+        Width = 25
+        Height = 17
+        Caption = 'X'
+        TabOrder = 0
+        OnClick = XClick
+      end
+      object Y: TCheckBox
+        Left = 72
+        Top = 17
+        Width = 25
+        Height = 17
+        Caption = 'Y'
+        TabOrder = 1
+        OnClick = YClick
+      end
+      object Ambas: TCheckBox
+        Left = 132
+        Top = 17
+        Width = 49
+        Height = 17
+        Caption = 'Ambas'
+        TabOrder = 2
+        OnClick = AmbasClick
+      end
     end
-  end
-  object StatusBar1: TStatusBar
-    Left = 0
-    Top = 690
-    Width = 1350
-    Height = 19
-    Panels = <
-      item
-        Text = '(x,y)'
-        Width = 50
-      end
-      item
-        Width = 50
-      end
-      item
-        Width = 50
-      end
-      item
-        Text = 'R G B'
-        Width = 50
-      end
-      item
-        Width = 50
-      end
-      item
-        Width = 50
-      end
-      item
-        Width = 50
-      end
-      item
-        Width = 50
-      end>
+    object Button11: TButton
+      Left = 387
+      Top = 413
+      Width = 75
+      Height = 25
+      Caption = 'Reset'
+      TabOrder = 1
+      OnClick = Button4Click
+    end
+    object Button12: TButton
+      Left = 16
+      Top = 88
+      Width = 75
+      Height = 25
+      Caption = 'Laplaciano'
+      TabOrder = 2
+      OnClick = Button12Click
+    end
   end
   object GroupBox1: TGroupBox
     Left = 680
     Top = 8
     Width = 465
-    Height = 441
+    Height = 471
     Caption = 'Filtros puntuales'
     Enabled = False
     TabOrder = 2
@@ -91,6 +103,13 @@ object Form2: TForm2
       Width = 31
       Height = 13
       Caption = 'Label2'
+    end
+    object Label3: TLabel
+      Left = 200
+      Top = 328
+      Width = 31
+      Height = 13
+      Caption = 'Label3'
     end
     object Button1: TButton
       Left = 16
@@ -177,8 +196,8 @@ object Form2: TForm2
       OnClick = Button2Click
     end
     object TrackBar2: TTrackBar
-      Left = 147
-      Top = 216
+      Left = 139
+      Top = 218
       Width = 150
       Height = 25
       Max = 100
@@ -189,7 +208,7 @@ object Form2: TForm2
     end
     object Button3: TButton
       Left = 16
-      Top = 288
+      Top = 368
       Width = 75
       Height = 25
       Caption = 'Potencia'
@@ -198,8 +217,8 @@ object Form2: TForm2
       OnClick = Button3Click
     end
     object Edit1: TEdit
-      Left = 147
-      Top = 290
+      Left = 139
+      Top = 370
       Width = 121
       Height = 21
       TabOrder = 7
@@ -208,7 +227,7 @@ object Form2: TForm2
     end
     object Button5: TButton
       Left = 16
-      Top = 352
+      Top = 429
       Width = 75
       Height = 25
       Caption = 'Senoidal'
@@ -217,8 +236,8 @@ object Form2: TForm2
       OnClick = Button5Click
     end
     object Edit2: TEdit
-      Left = 147
-      Top = 354
+      Left = 139
+      Top = 431
       Width = 121
       Height = 21
       TabOrder = 9
@@ -226,8 +245,8 @@ object Form2: TForm2
       OnKeyPress = Edit2KeyPress
     end
     object Button4: TButton
-      Left = 376
-      Top = 400
+      Left = 387
+      Top = 429
       Width = 75
       Height = 25
       Caption = 'Reset'
@@ -256,24 +275,108 @@ object Form2: TForm2
         'Constante')
       TabOrder = 12
     end
+    object Button13: TButton
+      Left = 16
+      Top = 296
+      Width = 75
+      Height = 25
+      Caption = 'Proporcion'
+      TabOrder = 13
+      OnClick = Button13Click
+    end
+    object TrackBar3: TTrackBar
+      Left = 144
+      Top = 296
+      Width = 150
+      Height = 26
+      Max = 100
+      Min = 1
+      Position = 1
+      TabOrder = 14
+      OnChange = TrackBar3Change
+    end
+    object RadioGroup2: TRadioGroup
+      Left = 319
+      Top = 287
+      Width = 98
+      Height = 89
+      Caption = 'Canal'
+      Items.Strings = (
+        'R'
+        'G'
+        'B'
+        'Constante')
+      TabOrder = 15
+    end
+  end
+  object ScrollBox1: TScrollBox
+    Left = 8
+    Top = 8
+    Width = 666
+    Height = 676
+    Constraints.MaxHeight = 700
+    Constraints.MaxWidth = 700
+    Enabled = False
+    TabOrder = 0
+    object Image1: TImage
+      Left = 3
+      Top = 3
+      Width = 374
+      Height = 403
+      AutoSize = True
+      OnMouseMove = Image1MouseMove
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 690
+    Width = 1350
+    Height = 19
+    Panels = <
+      item
+        Text = '(x,y)'
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Text = 'R G B'
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end>
   end
   object GroupBox3: TGroupBox
     Left = 680
     Top = 485
     Width = 465
-    Height = 168
+    Height = 199
     Caption = 'Histogramas'
     Enabled = False
     TabOrder = 3
     Visible = False
     object Image2: TImage
-      Left = 176
+      Left = 168
       Top = 16
       Width = 273
       Height = 121
     end
     object Button6: TButton
-      Left = 374
+      Left = 358
       Top = 143
       Width = 75
       Height = 25
@@ -283,7 +386,7 @@ object Form2: TForm2
     end
     object Button7: TButton
       Left = 24
-      Top = 16
+      Top = 24
       Width = 75
       Height = 25
       Caption = 'Rojo'
@@ -292,7 +395,7 @@ object Form2: TForm2
     end
     object Button8: TButton
       Left = 24
-      Top = 47
+      Top = 63
       Width = 75
       Height = 25
       Caption = 'Verde'
@@ -301,7 +404,7 @@ object Form2: TForm2
     end
     object Button9: TButton
       Left = 24
-      Top = 78
+      Top = 94
       Width = 75
       Height = 25
       Caption = 'Azul'
@@ -310,7 +413,7 @@ object Form2: TForm2
     end
     object Button10: TButton
       Left = 24
-      Top = 109
+      Top = 133
       Width = 75
       Height = 25
       Caption = 'Intensidad'
@@ -319,7 +422,7 @@ object Form2: TForm2
     end
     object CheckBox6: TCheckBox
       Left = 24
-      Top = 140
+      Top = 172
       Width = 97
       Height = 17
       Caption = 'Logaritmo'
@@ -342,10 +445,7 @@ object Form2: TForm2
     end
     object Bordes1: TMenuItem
       Caption = 'Bordes'
-      object Laplaciano1: TMenuItem
-        Caption = 'Laplaciano'
-        OnClick = Laplaciano1Click
-      end
+      OnClick = Bordes1Click
     end
   end
   object OpenPictureDialog1: TOpenPictureDialog

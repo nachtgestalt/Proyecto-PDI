@@ -45,9 +45,19 @@ type
     CheckBox6: TCheckBox;
     CheckBox7: TCheckBox;
     Bordes1: TMenuItem;
-    Laplaciano1: TMenuItem;
     Punto1: TMenuItem;
     RadioGroup1: TRadioGroup;
+    GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
+    X: TCheckBox;
+    Y: TCheckBox;
+    Ambas: TCheckBox;
+    Button11: TButton;
+    Button12: TButton;
+    Button13: TButton;
+    TrackBar3: TTrackBar;
+    RadioGroup2: TRadioGroup;
+    Label3: TLabel;
     procedure Abrir1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -73,8 +83,16 @@ type
     procedure Button9Click(Sender: TObject);
     procedure Button10Click(Sender: TObject);
     procedure CheckBox7Click(Sender: TObject);
-    procedure Laplaciano1Click(Sender: TObject);
     procedure Punto1Click(Sender: TObject);
+    procedure CheckBox8Click(Sender: TObject);
+    procedure btnDerivadaClick(Sender: TObject);
+    procedure XClick(Sender: TObject);
+    procedure Bordes1Click(Sender: TObject);
+    procedure YClick(Sender: TObject);
+    procedure AmbasClick(Sender: TObject);
+    procedure Button12Click(Sender: TObject);
+    procedure Button13Click(Sender: TObject);
+    procedure TrackBar3Change(Sender: TObject);
   private
     { Private declarations }
   public
@@ -87,9 +105,11 @@ type
     procedure binarizar(var M:MATRGB);
     procedure binarizarPromedio(var M:MATRGB);
     procedure desplazamiento(var M:MATRGB; canal : Integer);
+    procedure proporcion(var M:MATRGB; canal : Integer);
     procedure potencia(var M:MATRGB);
     procedure senoidal(var M:MATRGB);
     procedure histograma(var M:MATRGB; c: Integer; t:TImage);
+    procedure derivada(var M:MATRGB; direccion: Integer);
     procedure laplaciano;
   end;
 
@@ -120,6 +140,27 @@ begin
   histograma(MAThi,3,Image2);
 end;
 
+procedure TForm2.Button12Click(Sender: TObject);
+begin
+  laplaciano;
+end;
+
+procedure TForm2.Button13Click(Sender: TObject);
+begin
+  case RadioGroup2.ItemIndex of
+    0:
+      proporcion(MAT,2);
+    1:
+      proporcion(MAT,1);
+    2:
+      proporcion(MAT,0);
+    3:
+      proporcion(MAT,3);
+  end;
+  copyMB(AltoIM,AnchoIM,MAT,BM);
+  image1.Picture.Assign(BM);
+end;
+
 procedure TForm2.Button1Click(Sender: TObject);
 begin
   grises(MAT);
@@ -139,9 +180,6 @@ begin
     3:
       desplazamiento(MAT,3);
   end;
-  //if CheckBox2.Checked then desplazamiento(MAT,2);
-  //if CheckBox8.Checked then desplazamiento(MAT,1);
-  //if CheckBox9.Checked then desplazamiento(MAT,0);
   copyMB(AltoIM,AnchoIM,MAT,BM);
   image1.Picture.Assign(BM);
 end;
@@ -160,6 +198,9 @@ begin
   copyBM(AltoIM,AnchoIM,MAT,BMAux);
   Edit1.Text := '';
   Edit2.Text := '';
+  y.Checked := false;
+  x.Checked := false;
+  ambas.Checked := false;
 end;
 
 procedure TForm2.Button5Click(Sender: TObject);
@@ -264,7 +305,20 @@ begin
 
 end;
 
+procedure TForm2.CheckBox8Click(Sender: TObject);
+begin
+
+end;
+
 //Boton para aplicar binarizacion
+procedure TForm2.AmbasClick(Sender: TObject);
+begin
+if ambas.Checked then
+  begin
+    derivada(MAT,3);
+  end
+end;
+
 procedure TForm2.BinarizaClick(Sender: TObject);
 begin
   if CheckBox7.Checked then
@@ -373,6 +427,28 @@ begin
   Button2.Enabled := True;
 end;
 
+procedure TForm2.TrackBar3Change(Sender: TObject);
+begin
+  Label3.Caption := IntToStr(TrackBar3.Position);
+  Button13.Enabled := True;
+end;
+
+procedure TForm2.XClick(Sender: TObject);
+begin
+if x.Checked then
+  begin
+    derivada(MAT,1);
+  end
+end;
+
+procedure TForm2.YClick(Sender: TObject);
+begin
+if y.Checked then
+  begin
+    derivada(MAT,2);
+  end
+end;
+
 //Procedimiento para aplicar grises
 procedure Tform2.grises(var M: MATRGB);
 var
@@ -409,6 +485,7 @@ begin
   StatusBar1.Panels[6].Text:=Inttostr(MAT[Y,X,0]);
 
 end;
+
 
 //Creacion del bitmap al cargar el programa
 procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -503,12 +580,39 @@ end;
 
 
 
+procedure TForm2.Bordes1Click(Sender: TObject);
+begin
+if Bordes1.Checked = false then
+  begin
+    GroupBox4.Enabled := True;
+    GroupBox4.Visible := True;
+    GroupBox3.Enabled := True;
+    GroupBox3.Visible := True;
+    Bordes1.Checked := true;
+  end
+  else
+  begin
+    GroupBox4.Enabled := False;
+    GroupBox4.Visible := False;
+    GroupBox3.Enabled := False;
+    GroupBox3.Visible := False;
+    Bordes1.Checked := false;
+  end;
+end;
+
+procedure TForm2.btnDerivadaClick(Sender: TObject);
+begin
+
+end;
+
 //Procedimiento para desplazar
 procedure Tform2.desplazamiento(var M: MATRGB; canal: Integer);
 var
   i,j,k,delta,desp: Integer;
+  porc : real;
 begin
   delta := TrackBar2.Position;
+  porc := TrackBar2.Position *(1/100);
   for i := 0 to AltoIM - 1 do
   begin
     for j := 0 to AnchoIM - 1 do
@@ -528,11 +632,44 @@ begin
         desp := mat[i,j,canal] + delta;
         if desp > 255 then
           desp := 255;
-        MAT[i,j,canal] := desp;
+        M[i,j,canal] := desp;
       end;
     end;
   end;
 end;
+
+//Procedimiento para filtro proporcion
+procedure Tform2.proporcion(var M: MATRGB; canal: Integer);
+var
+  i,j,k,proporcion,desp: Integer;
+  porc : real;
+begin
+  porc := TrackBar3.Position*(1/100);
+  for i := 0 to AltoIM - 1 do
+  begin
+    for j := 0 to AnchoIM - 1 do
+    begin
+      if canal = 3 then
+      begin
+      for k := 0 to 2 do
+      begin
+        proporcion := round(m[i,j,k] + porc*m[i,j,k]);
+        if proporcion > 255 then
+          proporcion := 255;
+        MAT[i,j,k] := proporcion;
+      end;
+      end
+      else
+      begin
+        proporcion := round(m[i,j,canal] + porc*m[i,j,canal]);
+        if proporcion > 255 then
+          proporcion := 255;
+        M[i,j,canal] := proporcion;
+      end;
+    end;
+  end;
+end;
+
 
 procedure TForm2.Edit1KeyPress(Sender: TObject; var Key: Char);
 begin
@@ -591,7 +728,6 @@ begin
     Punto1.Checked := false;
   end;
 end;
-
 
 //Procedimiento filtro senoidal
 procedure TForm2.senoidal(var M: MATRGB);
@@ -694,6 +830,55 @@ begin
       end;
 end;
 
+procedure TForm2.derivada(var M: MATRGB; direccion: Integer);
+var
+i,j,k : Integer;
+begin
+  if(direccion = 1) then // Derivada con respecto a X
+  begin
+    for I := 0 to AltoIM - 1 do
+    begin
+      for j := 0 to AnchoIM - 2 do
+      begin
+        for k := 0 to 2 do
+        begin
+          M[i,j,k] := Abs(M[i,j+1,k] - M[i,j,k])
+        end;//k
+      end;//j
+    end;//i
+  end;
+
+  if(direccion = 2) then // Derivada con respecto a Y
+  begin
+    for I := 0 to AltoIM - 2 do
+    begin
+      for j := 0 to AnchoIM - 1 do
+      begin
+        for k := 0 to 2 do
+        begin
+          M[i,j,k] := Abs(M[i+1,j,k] - M[i,j,k])
+        end;//k
+      end;//j
+    end;//i
+  end;
+
+  if(direccion = 3) then // Derivada en ambas direcciones
+  begin
+    for I := 0 to AltoIM - 2 do
+    begin
+      for j := 0 to AnchoIM - 2 do
+      begin
+        for k := 0 to 2 do
+        begin
+          M[i,j,k] := (Abs(M[i+1,j,k] - M[i,j,k]) + Abs(M[i,j+1,k] - M[i,j,k])) div 2;
+        end;//k
+      end;//j
+    end;//i
+  end;
+  copyMB(AltoIM, AnchoIM, M, BM);
+  Image1.Picture.Assign(BM);
+end;
+
 //Procedimiento para aplicar laplaciano
 procedure TForm2.laplaciano;
 var
@@ -724,11 +909,6 @@ begin
   Image1.Picture.Assign(BM);
 end;
 
-procedure TForm2.Laplaciano1Click(Sender: TObject);
-begin
-  laplaciano;
-end;
-
 {$R *.dfm}
 
 
@@ -741,6 +921,7 @@ begin
       ScrollBox1.Enabled := True;         //Se activa el cuadro contenedor del TImage
       Label1.Caption := IntToStr(TrackBar1.Position);  //Se asigna al label la posicion del trackbar de binarizacion
       Label2.Caption := IntToStr(TrackBar2.Position);  //Se asigna al label la posicion del trackbar de proporcion
+      Label3.Caption := IntToStr(TrackBar3.Position);
       Edit1.Text := ''; //Se ponen en blanco los edit
       Edit2.Text := '';
       //Asociar una imagen al Bitmap
