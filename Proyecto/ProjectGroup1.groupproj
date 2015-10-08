@@ -6,9 +6,6 @@
 			<Projects Include="..\ProjectPDI.dproj">
 				<Dependencies/>
 			</Projects>
-			<Projects Include="..\..\Versiones del profe\7-Histograma\7-Histograma\Project1.dproj">
-				<Dependencies/>
-			</Projects>
 		</ItemGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -26,23 +23,14 @@
 		<Target Name="ProjectPDI:Make">
 			<MSBuild Targets="Make" Projects="..\ProjectPDI.dproj"/>
 		</Target>
-		<Target Name="Project1">
-			<MSBuild Projects="..\..\Versiones del profe\7-Histograma\7-Histograma\Project1.dproj"/>
-		</Target>
-		<Target Name="Project1:Clean">
-			<MSBuild Targets="Clean" Projects="..\..\Versiones del profe\7-Histograma\7-Histograma\Project1.dproj"/>
-		</Target>
-		<Target Name="Project1:Make">
-			<MSBuild Targets="Make" Projects="..\..\Versiones del profe\7-Histograma\7-Histograma\Project1.dproj"/>
-		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="ProjectPDI;Project1"/>
+			<CallTarget Targets="ProjectPDI"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="ProjectPDI:Clean;Project1:Clean"/>
+			<CallTarget Targets="ProjectPDI:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="ProjectPDI:Make;Project1:Make"/>
+			<CallTarget Targets="ProjectPDI:Make"/>
 		</Target>
 		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 	</Project>
