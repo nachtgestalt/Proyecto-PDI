@@ -18,69 +18,6 @@ object Form2: TForm2
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object GroupBox4: TGroupBox
-    Left = 680
-    Top = 8
-    Width = 465
-    Height = 441
-    Caption = 'Filtros regionales'
-    Enabled = False
-    TabOrder = 4
-    Visible = False
-    object GroupBox5: TGroupBox
-      Left = 12
-      Top = 24
-      Width = 253
-      Height = 49
-      Caption = 'Derivada'
-      TabOrder = 0
-      object X: TCheckBox
-        Left = 13
-        Top = 17
-        Width = 25
-        Height = 17
-        Caption = 'X'
-        TabOrder = 0
-        OnClick = XClick
-      end
-      object Y: TCheckBox
-        Left = 72
-        Top = 17
-        Width = 25
-        Height = 17
-        Caption = 'Y'
-        TabOrder = 1
-        OnClick = YClick
-      end
-      object Ambas: TCheckBox
-        Left = 132
-        Top = 17
-        Width = 49
-        Height = 17
-        Caption = 'Ambas'
-        TabOrder = 2
-        OnClick = AmbasClick
-      end
-    end
-    object Button11: TButton
-      Left = 387
-      Top = 413
-      Width = 75
-      Height = 25
-      Caption = 'Reset'
-      TabOrder = 1
-      OnClick = Button4Click
-    end
-    object Button12: TButton
-      Left = 16
-      Top = 88
-      Width = 75
-      Height = 25
-      Caption = 'Laplaciano'
-      TabOrder = 2
-      OnClick = Button12Click
-    end
-  end
   object GroupBox1: TGroupBox
     Left = 680
     Top = 8
@@ -88,7 +25,7 @@ object Form2: TForm2
     Height = 471
     Caption = 'Filtros puntuales'
     Enabled = False
-    TabOrder = 2
+    TabOrder = 1
     Visible = False
     object Label1: TLabel
       Left = 211
@@ -309,6 +246,84 @@ object Form2: TForm2
       TabOrder = 15
     end
   end
+  object GroupBox4: TGroupBox
+    Left = 680
+    Top = 8
+    Width = 465
+    Height = 441
+    Caption = 'Filtros regionales'
+    Enabled = False
+    TabOrder = 4
+    Visible = False
+    object GroupBox5: TGroupBox
+      Left = 12
+      Top = 24
+      Width = 253
+      Height = 49
+      Caption = 'Derivada'
+      TabOrder = 0
+      object X: TCheckBox
+        Left = 13
+        Top = 17
+        Width = 25
+        Height = 17
+        Caption = 'X'
+        TabOrder = 0
+        OnClick = XClick
+      end
+      object Y: TCheckBox
+        Left = 72
+        Top = 17
+        Width = 25
+        Height = 17
+        Caption = 'Y'
+        TabOrder = 1
+        OnClick = YClick
+      end
+      object Ambas: TCheckBox
+        Left = 132
+        Top = 17
+        Width = 49
+        Height = 17
+        Caption = 'Ambas'
+        TabOrder = 2
+        OnClick = AmbasClick
+      end
+    end
+    object Button11: TButton
+      Left = 387
+      Top = 413
+      Width = 75
+      Height = 25
+      Caption = 'Reset'
+      TabOrder = 1
+      OnClick = Button4Click
+    end
+    object Button12: TButton
+      Left = 16
+      Top = 88
+      Width = 75
+      Height = 25
+      Caption = 'Laplaciano'
+      TabOrder = 2
+      OnClick = Button12Click
+    end
+    object Button14: TButton
+      Left = 16
+      Top = 135
+      Width = 125
+      Height = 26
+      Caption = 'Gradiente aproximadao'
+      Font.Charset = EASTEUROPE_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      OnClick = Button14Click
+    end
+  end
   object ScrollBox1: TScrollBox
     Left = 8
     Top = 8
@@ -367,7 +382,7 @@ object Form2: TForm2
     Height = 199
     Caption = 'Histogramas'
     Enabled = False
-    TabOrder = 3
+    TabOrder = 2
     Visible = False
     object Image2: TImage
       Left = 168

@@ -58,6 +58,7 @@ type
     TrackBar3: TTrackBar;
     RadioGroup2: TRadioGroup;
     Label3: TLabel;
+    Button14: TButton;
     procedure Abrir1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -93,6 +94,7 @@ type
     procedure Button12Click(Sender: TObject);
     procedure Button13Click(Sender: TObject);
     procedure TrackBar3Change(Sender: TObject);
+    procedure Button14Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -111,6 +113,7 @@ type
     procedure histograma(var M:MATRGB; c: Integer; t:TImage);
     procedure derivada(var M:MATRGB; direccion: Integer);
     procedure laplaciano;
+    procedure gradienteaprox(var M:MATRGB);
   end;
 
 const
@@ -159,6 +162,11 @@ begin
   end;
   copyMB(AltoIM,AnchoIM,MAT,BM);
   image1.Picture.Assign(BM);
+end;
+
+procedure TForm2.Button14Click(Sender: TObject);
+begin
+gradienteaprox(MAT);
 end;
 
 procedure TForm2.Button1Click(Sender: TObject);
@@ -875,6 +883,7 @@ begin
       end;//j
     end;//i
   end;
+  binarizarPromedio(M);
   copyMB(AltoIM, AnchoIM, M, BM);
   Image1.Picture.Assign(BM);
 end;
@@ -904,9 +913,30 @@ begin
       end;//k
     end;//j
   end;//i
+  binarizarPromedio(AUX);
   copyMB(AltoIM,AnchoIM,AUX,BM);
-  copyBM(AltoIM,AnchoIM,MAT,BM);
   Image1.Picture.Assign(BM);
+end;
+
+//Procedimiento para aplicar gradiente aproximado
+procedure TForm2.gradienteaprox(var M: MATRGB);
+var
+i,j,k,a,b,conv  : Integer;
+begin
+for I := 0 to AltoIM - 2 do
+begin
+  for j := 0 to AnchoIM - 2 do
+  begin
+    for k := 0 to 2 do
+    begin
+      M[i,j,k] := round(sqrt(Power((M[i+1,j+1,k] - M[i,j,k]),2) + Power((M[i,j+1,k] - M[i+1,j,k]),2)));
+    end;//k
+  end;//j
+end;//i
+binarizarPromedio(M);
+copyMB(AltoIM, AnchoIM, M, BM);
+Image1.Picture.Assign(BM);
+
 end;
 
 {$R *.dfm}
