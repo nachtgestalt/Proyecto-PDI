@@ -323,6 +323,15 @@ object Form2: TForm2
       TabOrder = 3
       OnClick = Button14Click
     end
+    object CheckBox2: TCheckBox
+      Left = 16
+      Top = 421
+      Width = 49
+      Height = 17
+      Caption = 'Ruido'
+      TabOrder = 4
+      Visible = False
+    end
   end
   object ScrollBox1: TScrollBox
     Left = 8
@@ -339,6 +348,7 @@ object Form2: TForm2
       Width = 374
       Height = 403
       AutoSize = True
+      OnDblClick = Image1DblClick
       OnMouseMove = Image1MouseMove
     end
   end

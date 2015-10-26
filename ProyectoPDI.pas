@@ -59,6 +59,7 @@ type
     RadioGroup2: TRadioGroup;
     Label3: TLabel;
     Button14: TButton;
+    CheckBox2: TCheckBox;
     procedure Abrir1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -95,6 +96,7 @@ type
     procedure Button13Click(Sender: TObject);
     procedure TrackBar3Change(Sender: TObject);
     procedure Button14Click(Sender: TObject);
+    procedure Image1DblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -204,6 +206,7 @@ procedure TForm2.Button4Click(Sender: TObject);
 begin
   Image1.Picture.Assign(BMAux);
   copyBM(AltoIM,AnchoIM,MAT,BMAux);
+  copyMB(AltoIM,AnchoIM,MAT,BM);
   Edit1.Text := '';
   Edit2.Text := '';
   y.Checked := false;
@@ -477,11 +480,22 @@ begin
   end;
 end;
 
+procedure TForm2.Image1DblClick(Sender: TObject);
+begin
+if CheckBox2.Checked then
+begin
+  CheckBox2.Checked := false;
+end
+else
+  CheckBox2.Checked := true;
+end;
+
 procedure TForm2.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 var
 ColorIM : Tcolor;
 R,G,B   : Byte;
+pos :TPoint;
 
 begin
 
@@ -491,6 +505,21 @@ begin
   StatusBar1.Panels[4].Text:=Inttostr(MAT[Y,X,2]);
   StatusBar1.Panels[5].Text:=Inttostr(MAT[Y,X,1]);
   StatusBar1.Panels[6].Text:=Inttostr(MAT[Y,X,0]);
+  if(CheckBox2.Checked) then
+  begin
+    if Shift = [ssRight] then
+    begin
+      BM.Canvas.Pixels[X,Y] := clBlack;
+      Image1.Picture.Graphic.Assign(BM);
+    end;
+    if (Shift = [ssLeft]) and ((Y < AltoIM-1) and (X < AnchoIM-1)) then
+    begin
+      BM.Canvas.Pixels[X,Y] := clWhite;
+      Image1.Picture.Graphic.Assign(BM);
+    end;
+    if (Shift = [ssDouble]) then
+      CheckBox2.Checked := False;
+  end;
 
 end;
 
