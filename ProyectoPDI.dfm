@@ -299,15 +299,6 @@ object Form2: TForm2
       TabOrder = 1
       OnClick = Button4Click
     end
-    object Button12: TButton
-      Left = 16
-      Top = 88
-      Width = 75
-      Height = 25
-      Caption = 'Laplaciano'
-      TabOrder = 2
-      OnClick = Button12Click
-    end
     object Button14: TButton
       Left = 16
       Top = 135
@@ -320,7 +311,7 @@ object Form2: TForm2
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      TabOrder = 3
+      TabOrder = 2
       OnClick = Button14Click
     end
     object CheckBox2: TCheckBox
@@ -329,8 +320,34 @@ object Form2: TForm2
       Width = 49
       Height = 17
       Caption = 'Ruido'
-      TabOrder = 4
+      TabOrder = 3
       Visible = False
+    end
+    object Button15: TButton
+      Left = 16
+      Top = 185
+      Width = 85
+      Height = 25
+      Caption = 'Contra armonico'
+      TabOrder = 4
+      OnClick = Button15Click
+    end
+    object Button16: TButton
+      Left = 16
+      Top = 79
+      Width = 89
+      Height = 35
+      Caption = 'Detectar bordes'
+      TabOrder = 5
+      OnClick = Button16Click
+    end
+    object Edit3: TEdit
+      Left = 128
+      Top = 185
+      Width = 121
+      Height = 21
+      TabOrder = 6
+      TextHint = 'Proporcione parametro'
     end
   end
   object ScrollBox1: TScrollBox
@@ -463,6 +480,14 @@ object Form2: TForm2
         Caption = 'Abrir'
         OnClick = Abrir1Click
       end
+      object Guardar1: TMenuItem
+        Caption = 'Guardar'
+        OnClick = Guardar1Click
+      end
+      object Guardarcomo1: TMenuItem
+        Caption = 'Guardar como'
+        OnClick = Guardarcomo1Click
+      end
     end
     object Punto1: TMenuItem
       Caption = 'Punto'
@@ -482,6 +507,10 @@ object Form2: TForm2
       'co)|*.ico|Enhanced Metafiles (*.emf)|*.emf|Metafiles (*.wmf)|*.w' +
       'mf'
     Left = 48
+    Top = 440
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    Left = 224
     Top = 440
   end
 end

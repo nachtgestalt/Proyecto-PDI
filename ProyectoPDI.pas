@@ -7,7 +7,8 @@ uses
   Dialogs, Menus, ExtDlgs, ExtCtrls, StdCtrls, ComCtrls, Math, JPEG;
 
 type
-  Mascara = Array[0..2,0..2] of Integer;
+  //Mascara = Array[0..2,0..2] of Integer;
+  Mascara = Array of Array of Integer;
   MATRGB= Array of Array of Array of byte;
   TForm2 = class(TForm)
     MainMenu1: TMainMenu;
@@ -53,13 +54,18 @@ type
     Y: TCheckBox;
     Ambas: TCheckBox;
     Button11: TButton;
-    Button12: TButton;
     Button13: TButton;
     TrackBar3: TTrackBar;
     RadioGroup2: TRadioGroup;
     Label3: TLabel;
     Button14: TButton;
     CheckBox2: TCheckBox;
+    Guardar1: TMenuItem;
+    Guardarcomo1: TMenuItem;
+    SavePictureDialog1: TSavePictureDialog;
+    Button15: TButton;
+    Button16: TButton;
+    Edit3: TEdit;
     procedure Abrir1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -92,11 +98,14 @@ type
     procedure Bordes1Click(Sender: TObject);
     procedure YClick(Sender: TObject);
     procedure AmbasClick(Sender: TObject);
-    procedure Button12Click(Sender: TObject);
     procedure Button13Click(Sender: TObject);
     procedure TrackBar3Change(Sender: TObject);
     procedure Button14Click(Sender: TObject);
     procedure Image1DblClick(Sender: TObject);
+    procedure Guardar1Click(Sender: TObject);
+    procedure Guardarcomo1Click(Sender: TObject);
+    procedure Button16Click(Sender: TObject);
+    procedure Button15Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -114,12 +123,14 @@ type
     procedure senoidal(var M:MATRGB);
     procedure histograma(var M:MATRGB; c: Integer; t:TImage);
     procedure derivada(var M:MATRGB; direccion: Integer);
-    procedure laplaciano;
+    procedure laplaciano(var M:Mascara);
     procedure gradienteaprox(var M:MATRGB);
+    procedure contraarmonico(var M:MATRGB);
   end;
 
-const
-Masc : Mascara =( (0,-1,0),
+//const
+
+{Masc : Mascara = ( (0,-1,0),
                   (-1,4,-1),
                   (0,-1,0) );
 Sobelx : Mascara =( (-1,0,-1),
@@ -129,6 +140,7 @@ Sobelx : Mascara =( (-1,0,-1),
 Sobely : Mascara =( (-1,-2,-1),
                   (0,0,0),
                   (1,2,1) );
+}
 
 var
   Form2: TForm2;
@@ -138,16 +150,13 @@ var
   BMJ                  : TJPEGImage;
 implementation
 
+uses Unit3;
+
 //Procedimiento para copiar de bitmap a matriz
 procedure TForm2.Button10Click(Sender: TObject);
 begin
   grises(MAThi);
   histograma(MAThi,3,Image2);
-end;
-
-procedure TForm2.Button12Click(Sender: TObject);
-begin
-  laplaciano;
 end;
 
 procedure TForm2.Button13Click(Sender: TObject);
@@ -169,6 +178,34 @@ end;
 procedure TForm2.Button14Click(Sender: TObject);
 begin
 gradienteaprox(MAT);
+end;
+
+procedure TForm2.Button15Click(Sender: TObject);
+begin
+contraarmonico(MAT);
+end;
+
+procedure TForm2.Button16Click(Sender: TObject);
+var
+i,j,k,a,b,conv  : Integer;
+aux           : Mascara;
+begin
+  Form3.ShowModal;
+  if Form3.ModalResult = mrOk then
+  begin
+    SetLength(aux,dim,dim);
+    for I := 0 to dim-1 do
+    begin
+     for j := 0 to dim-1  do
+     begin
+        aux[i,j] := StrToInt(Form3.StringGrid1.Cells[i,j]);
+     end;
+   end;
+    laplaciano(aux);
+    binarizarPromedio(MAT);
+    copyMB(AltoIM,AnchoIM,MAT,BM);
+    Image1.Picture.Assign(BM);
+  end;
 end;
 
 procedure TForm2.Button1Click(Sender: TObject);
@@ -480,6 +517,23 @@ begin
   end;
 end;
 
+procedure TForm2.Guardar1Click(Sender: TObject);
+begin
+//Guardar-----Sobre-escribir nombre archivo actual
+  BM.SaveToFile(OpenPictureDialog1.FileName);
+end;
+
+procedure TForm2.Guardarcomo1Click(Sender: TObject);
+begin
+if SavePictureDialog1.Execute then
+begin
+  BM.SaveToFile(SavePictureDialog1.FileName);
+end;
+
+
+
+end;
+
 procedure TForm2.Image1DblClick(Sender: TObject);
 begin
 if CheckBox2.Checked then
@@ -512,7 +566,7 @@ begin
       BM.Canvas.Pixels[X,Y] := clBlack;
       Image1.Picture.Graphic.Assign(BM);
     end;
-    if (Shift = [ssLeft]) and ((Y < AltoIM-1) and (X < AnchoIM-1)) then
+    if (Shift = [ssLeft])then
     begin
       BM.Canvas.Pixels[X,Y] := clWhite;
       Image1.Picture.Graphic.Assign(BM);
@@ -918,7 +972,7 @@ begin
 end;
 
 //Procedimiento para aplicar laplaciano
-procedure TForm2.laplaciano;
+procedure TForm2.laplaciano(var M: mascara);
 var
 i,j,k,a,b,conv  : Integer;
 AUX           : MATRGB;
@@ -935,16 +989,15 @@ begin
         begin
           for b := -1 to 1 do
           begin
-            conv := conv + (masc[a+1,b+1] * MAT[i+a,j+b,k]);
+            conv := conv + (M[a+1,b+1] * MAT[i+a,j+b,k]);
           end;//b
         end;//a
         AUX[i,j,k] := abs(conv) div 4;
       end;//k
     end;//j
   end;//i
-  binarizarPromedio(AUX);
   copyMB(AltoIM,AnchoIM,AUX,BM);
-  Image1.Picture.Assign(BM);
+  copyBM(Altoim,Anchoim,MAT,BM);
 end;
 
 //Procedimiento para aplicar gradiente aproximado
@@ -968,6 +1021,45 @@ Image1.Picture.Assign(BM);
 
 end;
 
+//Promedio Contra armonico
+procedure TForm2.contraarmonico(var M: MATRGB);
+var
+i,j,k,a,b  : Integer;
+q,sumNom,sumDen : real;
+AUX           : MATRGB;
+begin
+  if Edit3.Text = EmptyStr then
+  begin
+    Application.MessageBox(pchar('Ingresa un valor'),pchar('Error'), (MB_OK + MB_ICONSTOP));
+    Edit1.Clear;
+  end
+  else
+  begin
+    q := StrToFloat(edit3.Text);
+    for i := 1 to AltoIM - 2 do
+    begin
+      for j := 1 to AnchoIM-2 do
+      begin
+        for k := 0 to 2 do
+        begin
+        sumNom := 0;
+        sumDen := 0;
+          for a := -1 to 1 do
+          begin
+            for b := -1 to 1 do
+            begin
+                sumNom := sumNom + power(M[i+a,j+b,k],q+1);
+                sumDen := sumDen + power(M[i+a,j+b,k],q);
+            end;//b
+          end;//a
+          M[i,j,k] := round(sumNom/sumDen);
+        end;//k
+      end;//j
+    end;//i
+  end;
+  copyMB(AltoIM,AnchoIM,M,BM);
+  image1.Picture.Assign(BM);
+end;
 {$R *.dfm}
 
 
